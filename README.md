@@ -1,18 +1,18 @@
-# Arch XFCE4
+# Arch XFCE4 on Android
 
 Automatic Arch Linux + XFCE4 installer for Termux.
 
-## 🚀 **Installation**
+how to install
 
 Run the command below in Termux:
 
 ```bash
-pkg install wget -y && wget https://raw.githubusercontent.com/Snowyy777/Arch-xfce4/refs/heads/main/setup.sh && chmod +x setup.sh && ./setup.sh
+pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/Arch-android/refs/heads/main/setup.sh && chmod +x setup.sh && ./setup.sh
 ```
 >[!NOTE]
 > ## «⏳ The installation may take several minutes, depending on your internet connection.»
 
-## ▶️ How to start
+## How to start
 
 After installation:
 ```bash
