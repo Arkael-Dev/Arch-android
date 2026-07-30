@@ -18,7 +18,14 @@ After installation:
 ```bash
 ./startxfce4_arch.sh
 ```
-## Credits
+sudo user & pass 
+```
+Arkael
+```
+```
+1234
+```
+###redits
 
 This project uses the `startxfce4_arch.sh` script from LinuxDroidMaster's Termux-Desktops repository.
 
