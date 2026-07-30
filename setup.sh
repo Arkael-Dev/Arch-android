@@ -22,7 +22,7 @@ pacman -Sy
 echo -e '1\ny' | pacman -Syu
 pacman -S --needed --noconfirm xfce4
 pacman -S --noconfirm sudo
-useradd -m -G wheel Snowyy
+useradd -m -G wheel Arkael
 echo "Arkael:1234" | chpasswd
 sed -i '/^root ALL=(ALL:ALL) ALL$/a Snowyy ALL=(ALL:ALL) ALL' /etc/sudoers"
 wget -O startxfce4_arch.sh https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/refs/heads/main/scripts/proot_arch/startxfce4_arch.sh
