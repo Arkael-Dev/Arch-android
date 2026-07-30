@@ -25,7 +25,7 @@ Arkael
 ```
 1234
 ```
-###redits
+### Credits
 
 This project uses the `startxfce4_arch.sh` script from LinuxDroidMaster's Termux-Desktops repository.
 
