@@ -23,7 +23,6 @@ pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/linux-t
 Download
 app [termux](https://github.com/termux/termux-x11)
 
-
 app [droidspaces](https://github.com/ravindu644/Droidspaces-OSS)
-
+Your device must already be rooted, and the kernel must support Droidspaces.
 This Arkael project
