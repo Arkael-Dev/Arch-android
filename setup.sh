@@ -24,7 +24,7 @@ pacman -S --needed --noconfirm xfce4
 pacman -S --noconfirm sudo
 useradd -m -G wheel Arkael
 echo "Arkael:1234" | chpasswd
-sed -i '/^root ALL=(ALL:ALL) ALL$/a Snowyy ALL=(ALL:ALL) ALL' /etc/sudoers"
+sed -i '/^root ALL=(ALL:ALL) ALL$/a Arkael ALL=(ALL:ALL) ALL' /etc/sudoers"
 wget -O startxfce4_arch.sh https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/refs/heads/main/scripts/proot_arch/startxfce4_arch.sh
 sed -i 's/droidmaster/Arkael/g; s/proot-distro login archlinux/proot-distro login archlinuxarm/g' startxfce4_arch.sh
 chmod +x startxfce4_arch.sh
