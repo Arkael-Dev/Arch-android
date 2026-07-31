@@ -1,32 +1,16 @@
-# Arch XFCE4 on Android
+# Ubuntu XFCE4 on Android
 
-Automatic Arch Linux + XFCE4 installer for Termux.
-
+Automatic Ubuntu Linux + XFCE4 installer for Termux.
 how to install
-
+open the droidspace application & look for the Rootfs Repository Ubuntu 24.04.04 LTS - XFCE
 Run the command below in Termux:
 
 ```bash
-pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/Arch-android/refs/heads/main/setup.sh && chmod +x setup.sh && ./setup.sh
+pkg install wget -y && wget [https://raw.githubusercontent.com/Arkael-Dev/Arch-android/refs/heads/main/setup.sh](https://raw.githubusercontent.com/Arkael-Dev/Arch-android/refs/heads/ubuntu-exfce/setup.sh) && chmod +x setup.sh && ./setup.sh
 ```
 >[!NOTE]
 > ## «⏳ The installation may take several minutes, depending on your internet connection.»
 
-## How to start
-
-After installation:
-```bash
-./startxfce4_arch.sh
-```
-sudo user & pass 
-```
-Arkael
-```
-```
-1234
-```
-### Credits
-
-This project uses the `startxfce4_arch.sh` script from LinuxDroidMaster's Termux-Desktops repository.
-
-Credits to LinuxDroidMaster for the XFCE4 startup script.
+app [termux](https://github.com/termux/termux-x11)
+app [droidspaces](https://github.com/ravindu644/Droidspaces-OSS)
+This Arkael project
