@@ -3,6 +3,8 @@
 Ubuntu Linux + XFCE4 installer for Termux.
 how to install
 open the droidspace application & look for the Rootfs Repository Ubuntu 24.04.04 LTS - XFCE
+Your device must be rooted, and your kernel must support Droidspaces.
+You must use  arkael  as both the container hostname and username in Droidspaces.
 Run the command below in Termux:
 This is the first time I've run this on regular termux, not termux x11.
 ```
