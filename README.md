@@ -7,7 +7,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Ubuntu-24.04-orange?style=for-the-badge&logo=ubuntu" alt="Ubuntu 24.04">
   <img src="https://img.shields.io/badge/XFCE4-Desktop-blue?style=for-the-badge&logo=xfce" alt="XFCE4">
-  <img src="https://img.shields.io/badge/Android-Root-required-green?style=for-the-badge&logo=android" alt="Root Required">
   <img src="https://img.shields.io/badge/Termux-supported-black?style=for-the-badge&logo=termux" alt="Termux">
 </p>
 
