@@ -11,6 +11,10 @@ pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/linux-t
 >[!NOTE]
 > ## «⏳ The installation may take several minutes, depending on your internet connection.»
 
+Download
 app [termux](https://github.com/termux/termux-x11)
+
+
 app [droidspaces](https://github.com/ravindu644/Droidspaces-OSS)
+
 This Arkael project
