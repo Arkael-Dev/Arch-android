@@ -67,6 +67,7 @@ Run the following commands in **regular Termux**.
 pkg update && pkg upgrade -y
 pkg install x11-repo -y
 pkg install termux-x11-nightly pulseaudio virglrenderer-android -y
+apt install dbus-x11
 ```
 
 ### 2. PulseAudio Fix
