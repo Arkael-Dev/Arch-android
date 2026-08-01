@@ -64,10 +64,11 @@ Run the following commands in **regular Termux**.
 ### 1. Update Termux
 
 ```bash
-pkg update && pkg upgrade -y
+termux-setup-storage
+``
 pkg install x11-repo -y
-pkg install termux-x11-nightly pulseaudio virglrenderer-android -y
-apt install dbus-x11
+pkg update && pkg upgrade -y
+pkg install termux-x11-nightly pulseaudio virglrenderer-android dbus dbus-x11 -y
 ```
 
 ### 2. PulseAudio Fix
