@@ -1,22 +1,23 @@
-# 🐧 Ubuntu XFCE4 on Android
+# 🐧 Ubuntu GNOME on Android
 
 <p align="center">
-  <b>Ubuntu Linux + XFCE4 Desktop running on Android through Termux & Droidspaces.</b>
+  <b>Ubuntu Linux + GNOME Desktop running on Android through Termux & Droidspaces.</b>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Ubuntu-24.04-orange?style=for-the-badge&logo=ubuntu" alt="Ubuntu 24.04">
-  <img src="https://img.shields.io/badge/XFCE4-Desktop-blue?style=for-the-badge&logo=xfce" alt="XFCE4">
+  <img src="https://img.shields.io/badge/Ubuntu-22.04-orange?style=for-the-badge&logo=ubuntu" alt="Ubuntu 22.04">
+  <img src="https://img.shields.io/badge/GNOME-Desktop-blue?style=for-the-badge&logo=gnome" alt="GNOME">
   <img src="https://img.shields.io/badge/Termux-supported-black?style=for-the-badge&logo=termux" alt="Termux">
+  <img src="https://img.shields.io/badge/Root-required-red?style=for-the-badge&logo=android" alt="Root Required">
 </p>
 
 ---
 
 ## 🚀 About
 
-**Ubuntu XFCE4 on Android** is an installer for running an Ubuntu Linux desktop environment with **XFCE4** on Android using **Termux** and **Droidspaces**.
+**Ubuntu GNOME on Android** is an installer for running an Ubuntu Linux desktop environment with **GNOME** on Android using **Termux** and **Droidspaces**.
 
-> ⚡ Lightweight XFCE4 desktop — no GNOME required.
+> 🖥️ Full GNOME desktop experience running directly on Android.
 
 ---
 
@@ -27,20 +28,30 @@
 - 🐧 Kernel must support **Droidspaces**
 - 📦 **Droidspaces** installed
 - 💻 **Termux** installed
-- 👤 Container hostname: `arkael`
-- 👤 Container username: `arkael`
+- 👤 Container hostname: `ark`
+- 👤 Container username: `ark`
 
 ---
 
 ## 📦 Droidspaces Setup
 
-Open the **Droidspaces** application and look for:
+Open the **Droidspaces** application and look for the Ubuntu Rootfs.
 
-**Rootfs Repository → Ubuntu 24.04.04 LTS - XFCE**
+**Rootfs Repository → Ubuntu 22.04 Server ARM64**
 
 Your device must be rooted, and your kernel must support **Droidspaces**.
 
-You must use **`arkael`** as both the container hostname and username in Droidspaces.
+You must use **`ark`** as both the container hostname and username in Droidspaces.
+
+---
+
+## 📥 GNOME Rootfs
+
+Download the Ubuntu 22.04 ARM64 rootfs:
+
+https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-arm64-root.tar.xz
+
+Use this rootfs with **Droidspaces** before running the installer.
 
 ---
 
@@ -69,7 +80,7 @@ sed -i 's/module-sles-sink/module-aaudio-sink/g' "$PREFIX/etc/pulse/default.pa"
 ### 3. Run the Installer
 
 ```bash
-pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/linux-termux/refs/heads/ubuntu-exfce/setup.sh && chmod +x setup.sh && ./setup.sh
+pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/linux-termux/refs/heads/ubuntu-gnome/setup.sh && chmod +x setup.sh && ./setup.sh
 ```
 
 ---
@@ -81,7 +92,7 @@ This project uses:
 ```text
 Ubuntu Linux
      │
-     ├── XFCE4 Desktop
+     ├── GNOME Desktop
      │
      ├── Termux
      │
@@ -90,7 +101,7 @@ Ubuntu Linux
      └── Termux:X11
 ```
 
-> 🎨 XFCE4 is used instead of GNOME to provide a lighter desktop experience on Android.
+> 🎨 GNOME provides a modern full desktop experience on Android.
 
 ---
 
@@ -103,11 +114,15 @@ Ubuntu Linux
 > ⏳ The installation may take several minutes, depending on your internet connection.
 
 > [!WARNING]
-> Make sure the Droidspaces container hostname and username are both set to **`arkael`**.
+> Make sure the Droidspaces container hostname and username are both set to **`ark`**.
 
 ---
 
 ## 📥 Downloads
+
+### Ubuntu GNOME Rootfs
+
+[![Ubuntu Rootfs](https://img.shields.io/badge/Download-Ubuntu%2022.04%20ARM64-orange?style=for-the-badge&logo=ubuntu)](https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-arm64-root.tar.xz)
 
 ### Termux:X11
 
@@ -121,10 +136,10 @@ Ubuntu Linux
 
 ## ⭐ Project
 
-**Ubuntu XFCE4 on Android**
+**Ubuntu GNOME on Android**
 
 Made by **Arkael**
 
-> 🐧 Ubuntu + XFCE4 + Android + Termux + Droidspaces
+> 🐧 Ubuntu + GNOME + Android + Termux + Droidspaces
 >
-> **A lightweight Linux desktop experience on Android.**
+> **A modern Linux desktop experience on Android.**
