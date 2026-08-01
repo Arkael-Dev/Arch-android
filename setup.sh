@@ -55,9 +55,10 @@ sleep 3
 
 
 # 6. Add the required commands to the container's .bashrc
-# Includes DBus, zombie-process cleanup, gnome cleanup,
+# Includes apt install dbus-x11, DBus, zombie-process cleanup, gnome cleanup,
 # and GPU acceleration configuration
-su -c "echo 'export DISPLAY=:5; \
+su -c "echo 'apt update && apt install dbus-x11 -y; \
+export DISPLAY=:5; \
 export XDG_RUNTIME_DIR=/run/user/0; \
 mkdir -p \$XDG_RUNTIME_DIR; \
 chmod 700 \$XDG_RUNTIME_DIR; \
