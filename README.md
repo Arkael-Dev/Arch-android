@@ -62,10 +62,11 @@ Run the following commands in **regular Termux**.
 > ℹ️ This setup is designed to be started from regular Termux, not directly from Termux:X11.
 
 ### 1. Update Termux
-
-```bash
+storage termux
+```
 termux-setup-storage
-``
+```
+```
 pkg install x11-repo -y
 pkg update && pkg upgrade -y
 pkg install termux-x11-nightly pulseaudio virglrenderer-android dbus dbus-x11 -y
