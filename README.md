@@ -69,8 +69,7 @@ termux-setup-storage
 ```
 pkg update && pkg upgrade -y
 pkg install x11-repo -y
-pkg update
-pkg install termux-x11-nightly pulseaudio virglrenderer-android dbus -y
+pkg install termux-x11-nightly pulseaudio virglrenderer-android -y
 ```
 
 ### 2. PulseAudio Fix
