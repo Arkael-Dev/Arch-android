@@ -85,7 +85,19 @@ sed -i 's/module-sles-sink/module-aaudio-sink/g' "$PREFIX/etc/pulse/default.pa"
 ```bash
 pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/linux-termux/refs/heads/ubuntu-gnome/setup.sh && chmod +x setup.sh && ./setup.sh
 ```
-
+fixed run gnome Shell
+```
+export DISPLAY=:5
+export XDG_RUNTIME_DIR=/run/user/0
+mkdir -p $XDG_RUNTIME_DIR
+chmod 700 $XDG_RUNTIME_DIR
+export NO_AT_BRIDGE=1
+export XDG_CURRENT_DESKTOP=GNOME
+export XDG_SESSION_TYPE=x11
+export GALLIUM_DRIVER=llvmpipe
+export LIBGL_ALWAYS_SOFTWARE=1
+dbus-launch gnome-shell --x11
+```
 ---
 
 ## 🖥️ Desktop Environment
