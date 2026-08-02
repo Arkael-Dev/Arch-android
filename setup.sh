@@ -9,6 +9,7 @@ NC='\033[0m' # No Color
 echo -e "${MAGENTA}========================================${NC}"
 echo -e "${CYAN}        ARKAEL TERMUX INSTALLER  XFCE4       ${NC}"
 echo -e "${MAGENTA}========================================${NC}"
+
 # 1. Update and Upgrade Packages
 echo -e "${YELLOW}[+] Updating and upgrading packages...${NC}"
 pkg update -y && pkg upgrade -y
@@ -17,7 +18,7 @@ pkg update -y && pkg upgrade -y
 echo -e "${YELLOW}[+] Installing repositories...${NC}"
 pkg install -y tur-repo
 pkg install -y x11-repo
-pkg update -y
+pkg install xorg-xrdb -y
 pkg install fastfetch -y
 
 fastfetch
@@ -104,19 +105,25 @@ EOF
 echo -e "${YELLOW}[+] Setting executable permissions...${NC}"
 chmod +x ~/arkael
 
-# 7. Create alias in .bashrc without changing default Termux look
-echo -e "${YELLOW}[+] Configuring .bashrc with alias...${NC}"
+# 7. Add HOME to PATH so 'arkael' can be executed directly
+echo -e "${YELLOW}[+] Configuring PATH...${NC}"
 
-# FIXED: Create .bashrc if it doesn't exist to prevent grep error
+# Create .bashrc if it doesn't exist
 touch ~/.bashrc
 
-# Add alias if it doesn't exist (Without welcome messages or PS1 changes)
-if ! grep -q "alias arkael=" ~/.bashrc; then
-    echo 'alias arkael="~/arkael"' >> ~/.bashrc
+# Add HOME to PATH if it doesn't already exist
+if ! grep -q 'export PATH="$HOME:$PATH"' ~/.bashrc; then
+    echo 'export PATH="$HOME:$PATH"' >> ~/.bashrc
 fi
+
+# Apply PATH immediately
+export PATH="$HOME:$PATH"
+hash -r
 
 # 8. Reload configuration
 source ~/.bashrc
+export PATH="$HOME:$PATH"
+hash -r
 
 # 9. Create Shutdown shortcut on Desktop without nano
 echo -e "${YELLOW}[+] Creating Shutdown shortcut...${NC}"
