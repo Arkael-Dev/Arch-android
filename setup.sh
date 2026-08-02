@@ -1,16 +1,34 @@
-#!/bin/bash
-pkg update -y
-pkg upgrade -y
-pkg install tur-repo -y
-pkg install x11-repo -y
-pkg install termux-x11-nightly -y
-pkg install pulseaudio -y
-pkg install wget -y
-pkg install git -y
-termux-setup-storage
-pkg install xfce4 -y
+# Define Colors
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+YELLOW='\033[1;33m'
+MAGENTA='\033[0;35m'
+NC='\033[0m' # No Color
 
-cat > ~/arkael.sh << 'EOF'
+echo -e "${MAGENTA}========================================${NC}"
+echo -e "${CYAN}        ARKAEL TERMUX INSTALLER         ${NC}"
+echo -e "${MAGENTA}========================================${NC}"
+
+# 1. Update and Upgrade Packages
+echo -e "${YELLOW}[+] Updating and upgrading packages...${NC}"
+pkg update -y && pkg upgrade -y
+
+# 2. Install Repositories
+echo -e "${YELLOW}[+] Installing repositories...${NC}"
+pkg install -y tur-repo
+pkg install -y x11-repo
+
+# 3. Install Required Packages & XFCE4
+echo -e "${YELLOW}[+] Installing required packages and XFCE4 desktop...${NC}"
+pkg install -y termux-x11-nightly pulseaudio wget git xfce4
+
+# 4. Setup Storage Access (FIXED: auto 'y' so it doesn't hang)
+echo -e "${YELLOW}[+] Setting up storage access...${NC}"
+yes | termux-setup-storage
+
+# 5. Create 'arkael' launcher script without nano
+echo -e "${YELLOW}[+] Creating arkael launcher script...${NC}"
+cat << 'EOF' > ~/arkael
 #!/data/data/com.termux/files/usr/bin/bash
 
 # ============================================================
@@ -78,9 +96,42 @@ export QT_QUICK_BACKEND=software
 exec dbus-launch --exit-with-session xfce4-session
 EOF
 
-chmod +x ~/arkael.sh
-grep -q "alias arkael=" ~/.bashrc || echo "alias arkael='bash ~/arkael.sh'" >> ~/.bashrc
+# 6. Make the 'arkael' script executable
+echo -e "${YELLOW}[+] Setting executable permissions...${NC}"
+chmod +x ~/arkael
+
+# 7. Create alias in .bashrc without changing default Termux look
+echo -e "${YELLOW}[+] Configuring .bashrc with alias...${NC}"
+
+# FIXED: Create .bashrc if it doesn't exist to prevent grep error
+touch ~/.bashrc
+
+# Add alias if it doesn't exist (Without welcome messages or PS1 changes)
+if ! grep -q "alias arkael=" ~/.bashrc; then
+    echo 'alias arkael="~/arkael"' >> ~/.bashrc
+fi
+
+# 8. Reload configuration
 source ~/.bashrc
 
-#run
-arkael
+# 9. Create Shutdown shortcut on Desktop without nano
+echo -e "${YELLOW}[+] Creating Shutdown shortcut...${NC}"
+mkdir -p ~/Desktop
+cat << 'EOF' > ~/Desktop/shutdown.desktop
+[Desktop Entry]
+Type=Application
+Name=Shutdown
+# Comment=Close Termux:X11 session
+# Exec: the command to run — kills the X server and session
+Exec=sh -c "current_pid=$$; pids=$(pgrep -f 'termux.x11' | grep -v $current_pid); if [ -n \"$pids\" ]; then kill -9 $pids; fi"
+Icon=xfsm-shutdown
+Terminal=true
+Categories=System;
+Path=
+StartupNotify=false
+EOF
+
+echo -e "${MAGENTA}========================================${NC}"
+echo -e "${GREEN}         INSTALLATION COMPLETE!         ${NC}"
+echo -e "${MAGENTA}========================================${NC}"
+echo -e "${CYAN}To launch the portable PC desktop, type:${NC} ${YELLOW}arkael${NC}"
