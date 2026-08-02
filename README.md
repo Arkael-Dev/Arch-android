@@ -84,6 +84,7 @@ XFCE4 will start again.
 
 ---
 
+Manual installer command [here](https://github.com/Arkael-Dev/portable-pc)
 ## 📦 Install Apps in Termux XFCE4
 
 To search for an available app:
