@@ -121,7 +121,14 @@ Graphics performance depends on your Android device, GPU, ROM, drivers, Mesa con
 > After exiting Arch Linux, open Termux again and type `arkael-arch`.
 
 ---
-
+fixed storage Arch Linux after install
+closed dekstop XFCE4 and run termux👇
+```
+termux-setup-storage && \
+echo "[+] Termux storage fixed." && \
+echo "[+] Checking Android storage..." && \
+ls -lah ~/storage/shared
+```
 ## 📥 Downloads
 
 ### Termux
