@@ -42,8 +42,6 @@ export GDK_DPI_SCALE=0.75
 export XCURSOR_SIZE=40
 export QTWEBENGINE_DISABLE_GPU=1
 export QT_QUICK_BACKEND=software
-# Tambahan untuk mengatasi error D-Bus pada log:
-export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 EOF
 
 # Beri izin & tambah perintah singkat
