@@ -1,78 +1,86 @@
-#!/bin/sh
+#!/bin/bash
+pkg update -y
+pkg upgrade -y
+pkg install tur-repo -y
+pkg install x11-repo -y
+pkg install termux-x11-nightly -y
+pkg install pulseaudio -y
+pkg install wget -y
+pkg install git -y
+termux-setup-storage
+pkg install xfce4 -y
+
+cat > ~/arkael.sh << 'EOF'
+#!/data/data/com.termux/files/usr/bin/bash
 
 # ============================================================
-# Droidspaces + Termux:X11 + PulseAudio + XFCE Setup
-# Container: arkael
-# Display: :5
+# Native Termux XFCE4 Launch Script (No proot)
+# Includes DPI scaling, GPU workarounds, and stale file cleanup
 # ============================================================
 
-# 1. Force-stop Termux:X11, PulseAudio, and stop the container
-su -c "am force-stop com.termux.x11" 2>/dev/null
+# Kill leftover processes
+pkill -9 -f "termux.x11" 2>/dev/null
+pkill -9 -f "xfce4-session" 2>/dev/null
+pkill -9 -f "pulseaudio" 2>/dev/null
+pkill -9 -f "dbus-launch" 2>/dev/null
+pkill -9 -f "dbus-daemon" 2>/dev/null
 
-su -c "/data/local/Droidspaces/bin/droidspaces --name='arkael' stop" 2>/dev/null
+sleep 2
 
-pkill -9 termux-x11 Xorg virglrenderer pulseaudio 2>/dev/null
+# Clean up stale PID files and sockets from previous sessions
+# Prevents gpg-agent "socket file removed - retrying binding" loop
+rm -f /data/data/com.termux/files/usr/var/run/dbus/pid
+gpgconf --kill gpg-agent 2>/dev/null
 
-su -c "pkill -9 termux-x11 Xorg virglrenderer pulseaudio" 2>/dev/null
+# Ensure sdcard symlinks exist
+if [ ! -d "$HOME/storage" ]; then
+    termux-setup-storage
+fi
+
+# Start PulseAudio
+pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1
+
+sleep 1
+
+# Start X server
+export XDG_RUNTIME_DIR=${TMPDIR}
+termux-x11 :0 >/dev/null &
 
 sleep 3
 
+# Launch Termux:X11 app
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
 
-# 2. Clean old X11 lock files and sockets
-su -c "rm -rf /data/data/com.termux/files/usr/tmp/.X5-lock \
-/data/data/com.termux/files/usr/tmp/.X11-unix/X5" 2>/dev/null
+sleep 1
 
-rm -rf /data/data/com.termux/files/usr/tmp/.X5-lock \
-/data/data/com.termux/files/usr/tmp/.X11-unix/X5 2>/dev/null
+# Set environment variables
+export DISPLAY=:0
+export PULSE_SERVER=127.0.0.1
 
-mkdir -p /data/data/com.termux/files/usr/tmp/.X11-unix
+# Set DPI via xrdb instead of export
+# xrdb -merge writes it to the X Resource Database where GTK/Qt apps can read it.
+# 144 DPI = 150% scaling (96 * 1.5 = 144)
+xrdb -merge <<< "Xft.dpi: 144"
 
-chmod 777 /data/data/com.termux/files/usr/tmp/.X11-unix
+# GTK scaling
+export GDK_SCALE=2
+export GDK_DPI_SCALE=0.75
+export XCURSOR_SIZE=40
 
+# Disable GPU for QtWebEngine-based browsers (Falkon, etc.)
+# Termux-X11 does not support GPU acceleration for Chromium's rendering pipeline.
+export QTWEBENGINE_DISABLE_GPU=1
+export QT_QUICK_BACKEND=software
 
-# 3. FIX AUDIO:
-# Copy the PulseAudio cookie using root access
-# to avoid Permission Denied errors
-su -c "mkdir -p /mnt/Droidspaces/arkael/root/.config/pulse"
+# Run XFCE4 Desktop
+# NOTE: We do NOT start dbus-daemon --system here.
+# The D-Bus "Failed to connect to bus" warnings are non-fatal.
+exec dbus-launch --exit-with-session xfce4-session
+EOF
 
-su -c "cp /data/data/com.termux/files/home/.config/pulse/cookie \
-/mnt/Droidspaces/arkael/root/.config/pulse/cookie 2>/dev/null"
+chmod +x ~/arkael.sh
+grep -q "alias arkael=" ~/.bashrc || echo "alias arkael='bash ~/arkael.sh'" >> ~/.bashrc
+source ~/.bashrc
 
-su -c "cp /data/data/com.termux/files/usr/etc/pulse/cookie \
-/mnt/Droidspaces/arkael/root/.config/pulse/cookie 2>/dev/null"
-
-
-# 4. Start Termux:X11 on display :5 silently
-termux-x11 :5 -noreset >/dev/null 2>&1 &
-
-sleep 5
-
-
-# 5. Start the Droidspaces container
-su -c "/data/local/Droidspaces/bin/droidspaces --name='arkael' start"
-
-sleep 3
-
-
-# 6. Add the required commands to the container's .bashrc
-# Includes DBus, zombie-process cleanup, XFCE cleanup,
-# and GPU acceleration configuration
-su -c "echo 'export DISPLAY=:5; \
-export XDG_RUNTIME_DIR=/run/user/0; \
-mkdir -p \$XDG_RUNTIME_DIR; \
-chmod 700 \$XDG_RUNTIME_DIR; \
-export NO_AT_BRIDGE=1; \
-export GALLIUM_DRIVER=virpipe; \
-pkill -9 pulseaudio 2>/dev/null; \
-pkill -9 -f xfce 2>/dev/null; \
-pkill -9 xfwm4 xfdesktop xfce4-panel xscreensaver 2>/dev/null; \
-sleep 1; \
-rm -rf /tmp/.Xauthority; \
-dbus-launch startxfce4; \
-sed -i \"/startxfce4/d\" /root/.bashrc' \
->> /mnt/Droidspaces/arkael/root/.bashrc"
-
-
-# 7. Enter the container
-# GUI, audio, and GPU fixes will run automatically
-su -c "/data/local/Droidspaces/bin/droidspaces --name='arkael' enter"
+#run
+arkael
