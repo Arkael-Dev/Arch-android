@@ -1,78 +1,55 @@
-#!/bin/sh
+#!/bin/bash
+pkg update -y
+pkg upgrade -y
 
-# ============================================================
-# Droidspaces + Termux:X11 + PulseAudio + XFCE Setup
-# Container: arkael
-# Display: :5
-# ============================================================
+# Repo & paket dasar
+pkg install tur-repo -y
+pkg install x11-repo -y
+pkg install termux-x11-nightly pulseaudio wget git proot-distro -y
+termux-setup-storage
 
-# 1. Force-stop Termux:X11, PulseAudio, and stop the container
-su -c "am force-stop com.termux.x11" 2>/dev/null
+# Pasang Arch Linux ARM
+proot-distro install danhunsaker/archlinuxarm:20260726
 
-su -c "/data/local/Droidspaces/bin/droidspaces --name='arkael' stop" 2>/dev/null
+# Konfigurasi sistem dalam Arch
+proot-distro login archlinuxarm -- bash -c "
+sed -i 's/^#DownloadUser = alpm/DownloadUser = alpm/' /etc/pacman.conf
+mv /usr/bin/pacman /usr/bin/pacman-real
+cat > /usr/bin/pacman <<'INNER'
+#!/bin/bash
+/usr/bin/pacman-real --disable-sandbox \"\$@\"
+INNER
+chmod +x /usr/bin/pacman
+pacman -Sy --noconfirm
+pacman -Syu --noconfirm
+pacman -S --needed --noconfirm xfce4 xfce4-goodies sudo
+useradd -m -G wheel Arkael
+echo 'Arkael:1234' | chpasswd
+sed -i '/^root ALL=(ALL:ALL) ALL$/a Arkael ALL=(ALL:ALL) ALL' /etc/sudoers
+"
 
-pkill -9 termux-x11 Xorg virglrenderer pulseaudio 2>/dev/null
+# Unduh & ubah skrip peluncur otomatis
+wget -q -O ~/start_arch.sh https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/refs/heads/main/scripts/proot_arch/startxfce4_arch.sh
+sed -i 's/droidmaster/Arkael/g; s/proot-distro login archlinux/proot-distro login archlinuxarm/g' ~/start_arch.sh
 
-su -c "pkill -9 termux-x11 Xorg virglrenderer pulseaudio" 2>/dev/null
+# Tambah pengaturan tampilan & suara
+cat >> ~/start_arch.sh << 'EOF'
+export DISPLAY=:0
+export PULSE_SERVER=127.0.0.1
+xrdb -merge <<< "Xft.dpi: 144"
+export GDK_SCALE=2
+export GDK_DPI_SCALE=0.75
+export XCURSOR_SIZE=40
+export QTWEBENGINE_DISABLE_GPU=1
+export QT_QUICK_BACKEND=software
+# Tambahan untuk mengatasi error D-Bus pada log:
+export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+EOF
 
-sleep 3
+# Beri izin & tambah perintah singkat
+chmod +x ~/start_arch.sh
+grep -q "alias arkael-arch=" ~/.bashrc || echo "alias arkael-arch='bash ~/start_arch.sh'" >> ~/.bashrc
+source ~/.bashrc
 
-
-# 2. Clean old X11 lock files and sockets
-su -c "rm -rf /data/data/com.termux/files/usr/tmp/.X5-lock \
-/data/data/com.termux/files/usr/tmp/.X11-unix/X5" 2>/dev/null
-
-rm -rf /data/data/com.termux/files/usr/tmp/.X5-lock \
-/data/data/com.termux/files/usr/tmp/.X11-unix/X5 2>/dev/null
-
-mkdir -p /data/data/com.termux/files/usr/tmp/.X11-unix
-
-chmod 777 /data/data/com.termux/files/usr/tmp/.X11-unix
-
-
-# 3. FIX AUDIO:
-# Copy the PulseAudio cookie using root access
-# to avoid Permission Denied errors
-su -c "mkdir -p /mnt/Droidspaces/arkael/root/.config/pulse"
-
-su -c "cp /data/data/com.termux/files/home/.config/pulse/cookie \
-/mnt/Droidspaces/arkael/root/.config/pulse/cookie 2>/dev/null"
-
-su -c "cp /data/data/com.termux/files/usr/etc/pulse/cookie \
-/mnt/Droidspaces/arkael/root/.config/pulse/cookie 2>/dev/null"
-
-
-# 4. Start Termux:X11 on display :5 silently
-termux-x11 :5 -noreset >/dev/null 2>&1 &
-
-sleep 5
-
-
-# 5. Start the Droidspaces container
-su -c "/data/local/Droidspaces/bin/droidspaces --name='arkael' start"
-
-sleep 3
-
-
-# 6. Add the required commands to the container's .bashrc
-# Includes DBus, zombie-process cleanup, XFCE cleanup,
-# and GPU acceleration configuration
-su -c "echo 'export DISPLAY=:5; \
-export XDG_RUNTIME_DIR=/run/user/0; \
-mkdir -p \$XDG_RUNTIME_DIR; \
-chmod 700 \$XDG_RUNTIME_DIR; \
-export NO_AT_BRIDGE=1; \
-export GALLIUM_DRIVER=virpipe; \
-pkill -9 pulseaudio 2>/dev/null; \
-pkill -9 -f xfce 2>/dev/null; \
-pkill -9 xfwm4 xfdesktop xfce4-panel xscreensaver 2>/dev/null; \
-sleep 1; \
-rm -rf /tmp/.Xauthority; \
-dbus-launch startxfce4; \
-sed -i \"/startxfce4/d\" /root/.bashrc' \
->> /mnt/Droidspaces/arkael/root/.bashrc"
-
-
-# 7. Enter the container
-# GUI, audio, and GPU fixes will run automatically
-su -c "/data/local/Droidspaces/bin/droidspaces --name='arkael' enter"
+# Jalankan
+arkael-arch
