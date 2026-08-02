@@ -7,7 +7,7 @@ MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 echo -e "${MAGENTA}========================================${NC}"
-echo -e "${CYAN}        ARKAEL TERMUX INSTALLER         ${NC}"
+echo -e "${CYAN}        ARKAEL TERMUX INSTALLER  XFCE4       ${NC}"
 echo -e "${MAGENTA}========================================${NC}"
 sleep 10
 # 1. Update and Upgrade Packages
