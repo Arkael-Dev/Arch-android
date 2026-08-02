@@ -1,55 +1,42 @@
-#!/bin/bash
-pkg update -y
-pkg upgrade -y
+# 🐧 Arch Linux XFCE4 on Android
 
-# Repo & paket dasar
-pkg install tur-repo -y
-pkg install x11-repo -y
-pkg install termux-x11-nightly pulseaudio wget git proot-distro -y
-termux-setup-storage
+<p align="center">
+  <b>Arch Linux + XFCE4 Desktop running on Android through Termux & Termux:X11.</b>
+</p>
 
-# Pasang Arch Linux ARM
-proot-distro install danhunsaker/archlinuxarm:20260726
+<p align="center">
+  <img src="https://img.shields.io/badge/Arch_Linux-Latest-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white" alt="Arch Linux">
+  <img src="https://img.shields.io/badge/XFCE4-Desktop-blue?style=for-the-badge&logo=xfce" alt="XFCE4">
+  <img src="https://img.shields.io/badge/Termux-supported-black?style=for-the-badge&logo=termux" alt="Termux">
+  <img src="https://img.shields.io/badge/Termux%3AX11-supported-black?style=for-the-badge&logo=x11" alt="Termux:X11">
+</p>
 
-# Konfigurasi sistem dalam Arch
-proot-distro login archlinuxarm -- bash -c "
-sed -i 's/^#DownloadUser = alpm/DownloadUser = alpm/' /etc/pacman.conf
-mv /usr/bin/pacman /usr/bin/pacman-real
-cat > /usr/bin/pacman <<'INNER'
-#!/bin/bash
-/usr/bin/pacman-real --disable-sandbox \"\$@\"
-INNER
-chmod +x /usr/bin/pacman
-pacman -Sy --noconfirm
-pacman -Syu --noconfirm
-pacman -S --needed --noconfirm xfce4 xfce4-goodies sudo
-useradd -m -G wheel Arkael
-echo 'Arkael:1234' | chpasswd
-sed -i '/^root ALL=(ALL:ALL) ALL$/a Arkael ALL=(ALL:ALL) ALL' /etc/sudoers
-"
+---
 
-# Unduh & ubah skrip peluncur otomatis
-wget -q -O ~/start_arch.sh https://raw.githubusercontent.com/LinuxDroidMaster/Termux-Desktops/refs/heads/main/scripts/proot_arch/startxfce4_arch.sh
-sed -i 's/droidmaster/Arkael/g; s/proot-distro login archlinux/proot-distro login archlinuxarm/g' ~/start_arch.sh
+## 🚀 About
 
-# Tambah pengaturan tampilan & suara
-cat >> ~/start_arch.sh << 'EOF'
-export DISPLAY=:0
-export PULSE_SERVER=127.0.0.1
-xrdb -merge <<< "Xft.dpi: 144"
-export GDK_SCALE=2
-export GDK_DPI_SCALE=0.75
-export XCURSOR_SIZE=40
-export QTWEBENGINE_DISABLE_GPU=1
-export QT_QUICK_BACKEND=software
-# Tambahan untuk mengatasi error D-Bus pada log:
-export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-EOF
+**Arch Linux XFCE4 on Android** is an automatic installer for running an **Arch Linux desktop environment with XFCE4** on Android through **Termux** and **Termux:X11**.
 
-# Beri izin & tambah perintah singkat
-chmod +x ~/start_arch.sh
-grep -q "alias arkael-arch=" ~/.bashrc || echo "alias arkael-arch='bash ~/start_arch.sh'" >> ~/.bashrc
-source ~/.bashrc
+> Lightweight XFCE4 desktop environment designed for running Arch Linux on Android.
 
-# Jalankan
-arkael-arch
+---
+
+## ⚙️ Requirements
+
+- Android device
+- **Termux** installed
+- **Termux:X11** installed
+- Internet connection
+- Sufficient free storage
+- Compatible Android device
+
+> Root access is not required.
+
+---
+
+## 🛠️ Installation
+
+Open **regular Termux** and run:
+
+```bash
+pkg install wget -y && wget https://raw.githubusercontent.com/Arkael-Dev/linux-termux/refs/heads/Arch-linux-termux/setup.sh && chmod +x setup.sh && ./setup.sh
