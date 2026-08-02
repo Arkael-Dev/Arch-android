@@ -9,7 +9,7 @@ NC='\033[0m' # No Color
 echo -e "${MAGENTA}========================================${NC}"
 echo -e "${CYAN}        ARKAEL TERMUX INSTALLER         ${NC}"
 echo -e "${MAGENTA}========================================${NC}"
-
+sleep 10
 # 1. Update and Upgrade Packages
 echo -e "${YELLOW}[+] Updating and upgrading packages...${NC}"
 pkg update -y && pkg upgrade -y
